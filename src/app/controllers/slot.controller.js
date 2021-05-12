@@ -306,6 +306,66 @@ const expiredJob = async () => {
   }
 };
 
+const removeSlot = async (req, res) => {
+  try {
+    const { calendarId, slotId } = req.params;
+
+    let slot = await SlotService.getSlot(calendarId, slotId);
+
+    if (!slot) {
+      return res.status(400).json({ error: 'Nenhum slot encontrado' });
+    }
+
+    slot = await SlotService.removeSlot(slotId);
+
+    if (!slot) {
+      return res.status(400).json({
+        error: 'Não é possível remover um slot com agendamentos em andamento',
+      });
+    }
+
+    return res.status(200).json({ slot });
+  } catch (error) {
+    return res.status(500).json({ error: `Ocorreu um erro: ${error.message}` });
+  }
+};
+
+const getSlotsByCalendar = async (req, res) => {
+  try {
+    const { calendarId } = req.params;
+
+    const { initialDate, endDate } = req.query;
+
+    if (initialDate && !endDate) {
+      return res
+        .status(400)
+        .json({ error: 'A data final do slot é obrigatória' });
+    }
+
+    if (endDate && !initialDate) {
+      return res.status(400).json({ error: 'A data inicial é obrigatória' });
+    }
+
+    if (initialDate && !util.isValidDate(initialDate)) {
+      return res.status(400).json({ error: 'A data inicial está invalida' });
+    }
+
+    if (endDate && !util.isValidDate(endDate)) {
+      return res.status(400).json({ error: 'A data final está invalida' });
+    }
+
+    const slots = await SlotService.getSlotsByCalendar(calendarId, req.query);
+
+    if (!slots) {
+      return res.status(400).json({ error: 'Nenhum slot encontrado' });
+    }
+
+    return res.status(200).json({ slots });
+  } catch (error) {
+    return res.status(500).json({ error: `Ocorreu um erro: ${error.message}` });
+  }
+};
+
 module.exports = {
   create,
   verifySlot,
@@ -313,4 +373,6 @@ module.exports = {
   cancelAppointment,
   associateUserSecondSlot,
   expiredJob,
+  removeSlot,
+  getSlotsByCalendar,
 };

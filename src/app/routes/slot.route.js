@@ -15,6 +15,12 @@ router.post(
   SlotController.associateUserFirstSlot,
 );
 
+router.delete(
+  '/:slotId/removeSlot',
+  permission(MANAGER),
+  SlotController.removeSlot,
+);
+
 router.post(
   '/:slotId/user/:userId/secondAssociate',
   permission(CLIENT),
@@ -22,5 +28,6 @@ router.post(
 );
 
 router.get('/existSlot', permission(MANAGER), SlotController.verifySlot);
+router.get('/', permission(CLIENT), SlotController.getSlotsByCalendar);
 
 module.exports = router;
