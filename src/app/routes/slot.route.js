@@ -31,7 +31,7 @@ router.get('/existSlot', permission(MANAGER), SlotController.verifySlot);
 router.get('/', permission(CLIENT), SlotController.getSlotsByCalendar);
 router.get(
   '/:slotId/users',
-  permission(MANAGER),
+  permission(CLIENT),
   SlotController.getUsersBySlot,
 );
 
