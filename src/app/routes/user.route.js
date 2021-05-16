@@ -16,7 +16,7 @@ router.get(
   UserController.getStationByUser,
 );
 router.delete('/:userId', permission(ADMIN), UserController.remove);
-router.put('/:userId', permission(ADMIN), UserController.update);
+router.put('/:userId', permission(CLIENT), UserController.update);
 router.put(
   '/:userId/alterPassword',
   permission(CLIENT),
