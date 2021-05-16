@@ -9,7 +9,7 @@ const permission = require('../middlewares/permission.middleware');
 const { ADMIN, CLIENT } = require('../enums/permission.enum');
 
 router.get('/', permission(ADMIN), UserController.getAll);
-router.get('/:userId', permission(ADMIN), UserController.getById);
+router.get('/:userId', permission(CLIENT), UserController.getById);
 router.get(
   '/:userId/station',
   permission(ADMIN),
